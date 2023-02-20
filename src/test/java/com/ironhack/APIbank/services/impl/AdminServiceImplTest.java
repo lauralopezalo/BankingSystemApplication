@@ -1,6 +1,5 @@
 package com.ironhack.APIbank.services.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.APIbank.embeddable.Address;
 import com.ironhack.APIbank.embeddable.Money;
 import com.ironhack.APIbank.controllers.dto.accounts.CheckingDTO;
@@ -12,12 +11,9 @@ import com.ironhack.APIbank.models.users.Admin;
 import com.ironhack.APIbank.models.users.Role;
 import com.ironhack.APIbank.models.users.ThirdParty;
 import com.ironhack.APIbank.repositories.accounts.AccountRepository;
-import com.ironhack.APIbank.repositories.accounts.CheckingRepository;
 import com.ironhack.APIbank.repositories.accounts.SavingsRepository;
-import com.ironhack.APIbank.repositories.accounts.StudentCheckingRepository;
 import com.ironhack.APIbank.repositories.users.AccountHolderRepository;
 import com.ironhack.APIbank.repositories.users.AdminRepository;
-import com.ironhack.APIbank.repositories.users.ThirdPartyRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,14 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
@@ -45,26 +36,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class AdminServiceImplTest {
 
     @Autowired
-    private AccountHolderServiceImpl accountHolderService;
-    @Autowired
     private AccountHolderRepository accountHolderRepository;
     @Autowired
     private AdminServiceImpl adminServiceImpl;
     @Autowired
     private AdminRepository adminRepository;
     @Autowired
-    private CheckingRepository checkingRepository;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
     private SavingsRepository savingsRepository;
-    @Autowired
-    private StudentCheckingRepository studentCheckingRepository;
-    @Autowired
-    private ThirdPartyRepository thirdPartyRepository;
-    private MockMvc mockMvc;
 
     private AccountHolder accountHolder1, accountHolder2;
     private Savings savings;
@@ -123,12 +101,12 @@ class AdminServiceImplTest {
 
     @Test
     void addThirdParty() throws Exception {
-        ThirdParty thirdParty = new ThirdParty();
-        thirdParty.setHashedKey("hashedKey");
+        ThirdParty thirdParty = new ThirdParty("name","hashedKey","password","user456");
         ThirdParty thirdPartySaved = adminServiceImpl.addThirdParty(thirdParty);
         assertNotNull(thirdPartySaved.getId());
         assertEquals("hashedKey", thirdPartySaved.getHashedKey());
         assertEquals("THIRD_PARTY", thirdPartySaved.getRoles().get(0).getName());
+        assertEquals("user456", thirdPartySaved.getUsername());
     }
 
     @Test
@@ -208,17 +186,13 @@ class AdminServiceImplTest {
         when(accountHolderRepository.findById(1L)).thenReturn(Optional.of(account));
 
         Money balance = account.getBalance();
-
         assertEquals(new Money(new BigDecimal("1000")), balance);
     }
 
     @Test
     void updateAccountBalance_savingsAccount_returnsUpdatedAccount() {
-
         Money newBalance = new Money(new BigDecimal("200"), Currency.getInstance("USD"));
-
         Account updatedAccount = adminServiceImpl.updateAccountBalance(savings.getId(), newBalance);
-
         assertNotNull(updatedAccount);
         assertEquals(newBalance.getAmount(), updatedAccount.getBalance().getAmount());
     }
@@ -234,6 +208,5 @@ class AdminServiceImplTest {
         Long nonexistentAccountId = Long.MAX_VALUE;
         assertThrows(ResponseStatusException.class, () -> adminServiceImpl.deleteAccount(nonexistentAccountId));
     }
-
 
 }

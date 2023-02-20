@@ -2,7 +2,6 @@ package com.ironhack.APIbank.models.accounts;
 
 import com.ironhack.APIbank.embeddable.Money;
 import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -32,7 +31,6 @@ class CheckingTest {
         Checking checking = new Checking();
         checking.setBalance(new Money(new BigDecimal("1100.00")));
         checking.setMinimumBalance(new BigDecimal("1000.00"));
-        checking.setPenaltyFee(new BigDecimal("40.00"));
         checking.applyPenaltyFee();
 
         assertEquals(new BigDecimal("1100.00"), checking.getBalance().getAmount());

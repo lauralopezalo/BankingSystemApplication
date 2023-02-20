@@ -4,7 +4,6 @@ import com.ironhack.APIbank.embeddable.Money;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
@@ -18,7 +17,6 @@ class SavingsTest {
     void setUp() {
         savings.setBalance(new Money(new BigDecimal("1100.00")));
         savings.setMinimumBalance(new BigDecimal("1000.00"));
-        savings.setPenaltyFee(new BigDecimal("40.00"));
     }
 
     @AfterEach

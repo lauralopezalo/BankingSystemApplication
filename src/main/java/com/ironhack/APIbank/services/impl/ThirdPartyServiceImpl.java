@@ -25,6 +25,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyServiceInt {
     @Autowired
     private AccountRepository accountRepository;
 
+
     public Account transferMoney(String hashedKey, ThirdPartyDTO thirdPartyDTO) {
 
         Account account = accountRepository.findById(thirdPartyDTO.getAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
@@ -43,13 +44,13 @@ public class ThirdPartyServiceImpl implements ThirdPartyServiceInt {
             if (account instanceof Checking) {
                 if (account.getBalance().getAmount().compareTo(((Checking) account).getMinimumBalance()) > 0
                         && account.getBalance().getAmount().subtract(thirdPartyDTO.getAmount()).compareTo(((Checking) account).getMinimumBalance()) < 0) {
-                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getpenaltyFee())));
+                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getPENALTY_FEE())));
                 }
             }
             if (account instanceof Savings) {
                 if (account.getBalance().getAmount().compareTo(((Savings) account).getMinimumBalance()) > 0
                         && account.getBalance().getAmount().subtract(thirdPartyDTO.getAmount()).compareTo(((Savings) account).getMinimumBalance()) < 0) {
-                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getpenaltyFee())));
+                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getPENALTY_FEE())));
                 }
             }
             account.getBalance().decreaseAmount(thirdPartyDTO.getAmount());

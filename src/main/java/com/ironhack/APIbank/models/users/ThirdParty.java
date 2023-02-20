@@ -2,6 +2,7 @@ package com.ironhack.APIbank.models.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -13,6 +14,13 @@ public class ThirdParty {
     private Long id;
     private String name;
     private String hashedKey;
+
+    @NotNull
+    private String password;
+
+    @NotNull
+    @Column(unique = true)
+    private String username;
     @JsonIgnore
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<Role> roles;
@@ -20,8 +28,11 @@ public class ThirdParty {
     public ThirdParty() {
     }
 
-    public ThirdParty(String hashedKey) {
+    public ThirdParty(String name, String hashedKey, String password, String username) {
+        this.name = name;
         this.hashedKey = hashedKey;
+        this.password = password;
+        this.username = username;
     }
 
     public Long getId() {
@@ -54,5 +65,21 @@ public class ThirdParty {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

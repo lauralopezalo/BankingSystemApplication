@@ -81,13 +81,13 @@ public class AccountHolderServiceImpl implements AccountHolderServiceInt {
         if (sourceAccount instanceof Checking) {
             if (sourceAccount.getBalance().getAmount().compareTo(((Checking) sourceAccount).getMinimumBalance()) > 0
                     && sourceAccount.getBalance().getAmount().subtract(transferenceDTO.getAmount()).compareTo(((Checking) sourceAccount).getMinimumBalance()) < 0) {
-                sourceAccount.setBalance(new Money(sourceAccount.getBalance().decreaseAmount(sourceAccount.getpenaltyFee())));
+                sourceAccount.setBalance(new Money(sourceAccount.getBalance().decreaseAmount(sourceAccount.getPENALTY_FEE())));
             }
         }
         if (sourceAccount instanceof Savings) {
             if (sourceAccount.getBalance().getAmount().compareTo(((Savings) sourceAccount).getMinimumBalance()) > 0
                     && sourceAccount.getBalance().getAmount().subtract(transferenceDTO.getAmount()).compareTo(((Savings) sourceAccount).getMinimumBalance()) < 0) {
-                sourceAccount.setBalance(new Money(sourceAccount.getBalance().decreaseAmount(sourceAccount.getpenaltyFee())));
+                sourceAccount.setBalance(new Money(sourceAccount.getBalance().decreaseAmount(sourceAccount.getPENALTY_FEE())));
             }
         }
         sourceAccount.getBalance().decreaseAmount(transferenceDTO.getAmount());

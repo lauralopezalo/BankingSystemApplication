@@ -4,18 +4,16 @@ import java.math.BigDecimal;
 
 public class ThirdPartyDTO {
     private Long id;
-//    private String thirdPartyName;
     private BigDecimal amount;
     private Long accountId;
     private String secretKey;
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+    public ThirdPartyDTO(Long id, BigDecimal amount, Long accountId, String secretKey) {
+        this.id = id;
+        this.amount = amount;
+        this.accountId = accountId;
+        this.secretKey = secretKey;
+    }
 
     public BigDecimal getAmount() {
         return amount;
@@ -41,14 +39,6 @@ public class ThirdPartyDTO {
         this.secretKey = secretKey;
     }
 
-//    public String getThirdPartyName() {
-//        return thirdPartyName;
-//    }
-//
-//    public void setThirdPartyName(String thirdPartyName) {
-//        this.thirdPartyName = thirdPartyName;
-//    }
-
     public Long getId() {
         return id;
     }
@@ -56,12 +46,5 @@ public class ThirdPartyDTO {
     public void setId(Long id) {
         this.id = id;
     }
-//
-//    public String getHashedKey() {
-//        return hashedKey;
-//    }
-//
-//    public void setHashedKey(String hashedKey) {
-//        this.hashedKey = hashedKey;
-//    }
+
 }

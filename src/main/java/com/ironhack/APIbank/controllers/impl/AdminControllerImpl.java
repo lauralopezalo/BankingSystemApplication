@@ -24,37 +24,37 @@ public class AdminControllerImpl implements AdminControllerInt {
     @Autowired
     AdminServiceInt adminServiceInt;
 
-    @PostMapping("/add-new")
+    @PostMapping("/admin")
     @ResponseStatus(HttpStatus.CREATED)
     public Admin addNewAdmin(@RequestBody @Valid Admin admin){
        return adminServiceInt.addAdmin(admin);
     }
 
-    @PostMapping("/add-account-holder")
+    @PostMapping("/account-holder")
     @ResponseStatus(HttpStatus.CREATED)
     public AccountHolder addNewAccountHolder(@RequestBody AccountHolder accountHolder){
         return adminServiceInt.addAccountHolder(accountHolder);
     }
 
-    @PostMapping("/add-third-party")
+    @PostMapping("/third-party")
     @ResponseStatus(HttpStatus.CREATED)
     public ThirdParty addNewThirdParty(@RequestBody ThirdParty thirdParty){
         return adminServiceInt.addThirdParty(thirdParty);
     }
 
-    @PostMapping("/add-checking")
+    @PostMapping("/checking")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account addNewChecking(@RequestBody CheckingDTO accountDTO){
-        return adminServiceInt.addChecking(accountDTO);
+    public Account addNewChecking(@RequestBody CheckingDTO checkingDTO){
+        return adminServiceInt.addChecking(checkingDTO);
     }
 
-    @PostMapping("/add-savings-account")
+    @PostMapping("/savings-account")
     @ResponseStatus(HttpStatus.CREATED)
     public Savings addNewSavings(@RequestBody SavingsDTO savingsDTO){
         return adminServiceInt.addSavings(savingsDTO);
     }
 
-    @PostMapping("/add-credit-card-account")
+    @PostMapping("/credit-card-account")
     @ResponseStatus(HttpStatus.CREATED)
     public CreditCard addNewCreditCardAccount(@RequestBody CreditCardDTO creditCardDTO){
         return adminServiceInt.addCreditCardAccount(creditCardDTO);

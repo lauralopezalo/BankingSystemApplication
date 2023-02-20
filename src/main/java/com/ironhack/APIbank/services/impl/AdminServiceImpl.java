@@ -45,16 +45,6 @@ public class AdminServiceImpl implements AdminServiceInt {
     @Autowired
     UserRepository userRepository;
 
-//   /*public Admin addNewAdmin(AdminDTO adminDTO) {
-//        Admin admin = new Admin(adminDTO.getName(), adminDTO.getPassword());
-//        //admin.setName(adminDTO.getName());
-//        //admin.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
-//        Role adminRole = new Role("ADMIN");
-//        admin.setRoles(List.of(adminRole));
-//        adminRepository.save(admin);
-//        return admin;
-//    }*/
-
     public Admin addAdmin(Admin admin) {
         Role adminRole = new Role("ADMIN");
         admin.setRoles(List.of(adminRole));
