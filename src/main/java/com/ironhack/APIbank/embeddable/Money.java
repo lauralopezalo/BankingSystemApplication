@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
+import java.util.Objects;
 
 @Embeddable
 public class Money {
@@ -84,4 +85,16 @@ public class Money {
         return getCurrency().getSymbol() + " " + getAmount();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money = (Money) o;
+        return Objects.equals(getCurrency(), money.getCurrency()) && Objects.equals(getAmount(), money.getAmount());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCurrency(), getAmount());
+    }
 }

@@ -1,6 +1,5 @@
 package com.ironhack.APIbank.models.accounts;
 
-import com.ironhack.APIbank.embeddable.Money;
 import com.ironhack.APIbank.enums.Status;
 import com.ironhack.APIbank.models.users.AccountHolder;
 import jakarta.persistence.*;
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 public class Checking extends Account {
     private String secretKey;
     private final BigDecimal minimumBalance = new BigDecimal("250");
-    private final BigDecimal monthlyMaintenanceFee = new BigDecimal("12");
+    private BigDecimal monthlyMaintenanceFee = new BigDecimal("12");
     private LocalDate lastFeeUpdate = super.getCREATION_DATE();
 
     @Enumerated(EnumType.STRING)
@@ -32,13 +31,13 @@ public class Checking extends Account {
         LocalDate currentDate = LocalDate.now();
         while ((lastFeeUpdate.isBefore(currentDate.minusMonths(1)))) {
             super.getBalance().decreaseAmount(monthlyMaintenanceFee);
-            lastFeeUpdate = currentDate.plusMonths(1);;
+            lastFeeUpdate = lastFeeUpdate.plusMonths(1);;
         }
     }
 
     public void applyPenaltyFee() {
         if (super.getBalance().getAmount().compareTo(minimumBalance) < 0) {
-            super.getBalance().decreaseAmount(getPENALTY_FEE());
+            super.getBalance().decreaseAmount(getpenaltyFee());
         }
     }
 
@@ -58,6 +57,10 @@ public class Checking extends Account {
         return monthlyMaintenanceFee;
     }
 
+    public void setMonthlyMaintenanceFee(BigDecimal monthlyMaintenanceFee) {
+        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -73,4 +76,6 @@ public class Checking extends Account {
     public void setLastFeeUpdate(LocalDate lastFeeUpdate) {
         this.lastFeeUpdate = lastFeeUpdate;
     }
+
+
 }

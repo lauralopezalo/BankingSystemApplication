@@ -26,7 +26,7 @@ public abstract class Account {
     @JoinColumn(name = "secondary_owner_id")
     private AccountHolder secondaryOwner;
 
-    private final BigDecimal PENALTY_FEE = new BigDecimal("40");
+    private BigDecimal penaltyFee = new BigDecimal("40");
 
     @Column(name = "creation_date")
     private final LocalDate CREATION_DATE = LocalDate.now();
@@ -80,8 +80,16 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    public BigDecimal getPENALTY_FEE() {
-        return PENALTY_FEE;
+    public BigDecimal getpenaltyFee() {
+        return penaltyFee;
+    }
+
+    public BigDecimal getPenaltyFee() {
+        return penaltyFee;
+    }
+
+    public void setPenaltyFee(BigDecimal penaltyFee) {
+        this.penaltyFee = penaltyFee;
     }
 
     public LocalDate getCREATION_DATE() {

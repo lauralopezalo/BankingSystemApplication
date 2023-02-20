@@ -11,6 +11,7 @@ import com.ironhack.APIbank.models.users.AccountHolder;
 import com.ironhack.APIbank.models.users.Admin;
 import com.ironhack.APIbank.models.users.Role;
 import com.ironhack.APIbank.models.users.ThirdParty;
+import com.ironhack.APIbank.repositories.accounts.AccountRepository;
 import com.ironhack.APIbank.repositories.accounts.CheckingRepository;
 import com.ironhack.APIbank.repositories.accounts.SavingsRepository;
 import com.ironhack.APIbank.repositories.accounts.StudentCheckingRepository;
@@ -22,10 +23,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.math.BigDecimal;
@@ -60,9 +65,6 @@ class AdminServiceImplTest {
     @Autowired
     private ThirdPartyRepository thirdPartyRepository;
     private MockMvc mockMvc;
-
-    private AccountHolder primaryOwner;
-    private AccountHolder secondaryOwner;
 
     private AccountHolder accountHolder1, accountHolder2;
     private Savings savings;
@@ -166,7 +168,6 @@ class AdminServiceImplTest {
 
         assertNotNull(savings.getId());
         assertNull(savings.getSecondaryOwner());
-//        assertEquals(new BigDecimal("1000"), savings.getBalance());
         assertEquals(Currency.getInstance("USD"), savings.getBalance().getCurrency());
         assertEquals("savingsSecretKey", savings.getSecretKey());
     }
@@ -192,23 +193,35 @@ class AdminServiceImplTest {
         assertEquals(new BigDecimal("100.00"), updatedBalance.get().getAmount());
     }
 
-//    @Test
-//    void getAccountBalance_creditCardAccount_returnsUpdatedBalance() {
-//        Optional<Money> updatedBalance = Optional.ofNullable(checkingRepository.findById(savings.getId()).get().getBalance());
-//        assertNotNull(updatedBalance);
-//        assertEquals(new BigDecimal("100.00"), updatedBalance.get().getAmount());
-//    }
+    @Test
+    public void testGetAccountBalance_creditCard_returnsUpdatedBalance() {
+        Account account = new Checking();
+        account.setPrimaryOwner(accountHolder1);
+        account.setBalance(new Money(new BigDecimal("1000")));
+        account.setId(1L);
 
-//    @Test
-//    void updateAccountBalance_savingsAccount_returnsUpdatedAccount() {
-//
-//        Money newBalance = new Money(new BigDecimal("200"), Currency.getInstance("USD"));
-//
-//        Account updatedAccount = adminServiceImpl.updateAccountBalance(savings.getId(), newBalance);
-//
-//        assertNotNull(updatedAccount);
-//        assertEquals(newBalance.getAmount(), updatedAccount.getBalance().getAmount());
-//    }
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("username");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        AccountRepository accountHolderRepository = mock(AccountRepository.class);
+        when(accountHolderRepository.findById(1L)).thenReturn(Optional.of(account));
+
+        Money balance = account.getBalance();
+
+        assertEquals(new Money(new BigDecimal("1000")), balance);
+    }
+
+    @Test
+    void updateAccountBalance_savingsAccount_returnsUpdatedAccount() {
+
+        Money newBalance = new Money(new BigDecimal("200"), Currency.getInstance("USD"));
+
+        Account updatedAccount = adminServiceImpl.updateAccountBalance(savings.getId(), newBalance);
+
+        assertNotNull(updatedAccount);
+        assertEquals(newBalance.getAmount(), updatedAccount.getBalance().getAmount());
+    }
 
     @Test
     void deleteAccount_existingAccount_deletesAccount() {

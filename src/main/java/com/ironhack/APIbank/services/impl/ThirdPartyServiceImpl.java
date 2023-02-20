@@ -1,6 +1,5 @@
 package com.ironhack.APIbank.services.impl;
 
-import com.ironhack.APIbank.controllers.dto.accounts.TransferenceDTO;
 import com.ironhack.APIbank.controllers.dto.users.ThirdPartyDTO;
 import com.ironhack.APIbank.embeddable.Money;
 import com.ironhack.APIbank.models.accounts.Account;
@@ -12,8 +11,6 @@ import com.ironhack.APIbank.repositories.users.ThirdPartyRepository;
 import com.ironhack.APIbank.services.interfaces.ThirdPartyServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,13 +43,13 @@ public class ThirdPartyServiceImpl implements ThirdPartyServiceInt {
             if (account instanceof Checking) {
                 if (account.getBalance().getAmount().compareTo(((Checking) account).getMinimumBalance()) > 0
                         && account.getBalance().getAmount().subtract(thirdPartyDTO.getAmount()).compareTo(((Checking) account).getMinimumBalance()) < 0) {
-                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getPENALTY_FEE())));
+                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getpenaltyFee())));
                 }
             }
             if (account instanceof Savings) {
                 if (account.getBalance().getAmount().compareTo(((Savings) account).getMinimumBalance()) > 0
                         && account.getBalance().getAmount().subtract(thirdPartyDTO.getAmount()).compareTo(((Savings) account).getMinimumBalance()) < 0) {
-                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getPENALTY_FEE())));
+                    account.setBalance(new Money(account.getBalance().decreaseAmount(account.getpenaltyFee())));
                 }
             }
             account.getBalance().decreaseAmount(thirdPartyDTO.getAmount());
