@@ -29,15 +29,15 @@ class CheckingTest {
 
     @Test
     void testApplyPenaltyFee() {
-        Savings savings = new Savings();
-        savings.setBalance(new Money(new BigDecimal("1100.00")));
-        savings.setMinimumBalance(new BigDecimal("1000.00"));
-        savings.setPenaltyFee(new BigDecimal("40.00"));
-        savings.applyPenaltyFee();
+        Checking checking = new Checking();
+        checking.setBalance(new Money(new BigDecimal("1100.00")));
+        checking.setMinimumBalance(new BigDecimal("1000.00"));
+        checking.setPenaltyFee(new BigDecimal("40.00"));
+        checking.applyPenaltyFee();
 
-        assertEquals(new BigDecimal("1100.00"), savings.getBalance().getAmount());
-        savings.getBalance().decreaseAmount(new Money(new BigDecimal("1000.00")));
-        savings.applyPenaltyFee();
-        assertEquals(new BigDecimal("60.00"), savings.getBalance().getAmount());
+        assertEquals(new BigDecimal("1100.00"), checking.getBalance().getAmount());
+        checking.getBalance().decreaseAmount(new Money(new BigDecimal("1000.00")));
+        checking.applyPenaltyFee();
+        assertEquals(new BigDecimal("60.00"), checking.getBalance().getAmount());
     }
 }

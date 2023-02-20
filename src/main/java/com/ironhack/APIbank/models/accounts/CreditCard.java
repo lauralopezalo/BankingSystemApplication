@@ -41,6 +41,7 @@ public class CreditCard extends Account {
         LocalDate currentDate = LocalDate.now();
         while ((lastProfitUpdate.isBefore(currentDate.minusMonths(1)))) {
             BigDecimal interest = super.getBalance().getAmount().multiply(interestRate);
+            interest = interest.setScale(2, RoundingMode.HALF_UP);
             super.getBalance().increaseAmount(interest);
             lastProfitUpdate = lastProfitUpdate.plusMonths(1);
         }

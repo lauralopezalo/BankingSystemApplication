@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Table(name = "checking")
 public class Checking extends Account {
     private String secretKey;
-    private final BigDecimal minimumBalance = new BigDecimal("250");
+    private BigDecimal minimumBalance = new BigDecimal("250");
     private BigDecimal monthlyMaintenanceFee = new BigDecimal("12");
     private LocalDate lastFeeUpdate = super.getCREATION_DATE();
 
@@ -77,5 +77,7 @@ public class Checking extends Account {
         this.lastFeeUpdate = lastFeeUpdate;
     }
 
-
+    public void setMinimumBalance(BigDecimal minimumBalance) {
+        this.minimumBalance = minimumBalance;
+    }
 }

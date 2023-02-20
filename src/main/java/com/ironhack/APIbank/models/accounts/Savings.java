@@ -1,5 +1,6 @@
 package com.ironhack.APIbank.models.accounts;
 
+import com.ironhack.APIbank.embeddable.Money;
 import com.ironhack.APIbank.enums.Status;
 import com.ironhack.APIbank.models.users.AccountHolder;
 import jakarta.persistence.*;
@@ -43,13 +44,15 @@ public class Savings extends Account {
         this.status = Status.ACTIVE;
     }
 
-    public void addInterest() {
+    public Money addInterest() {
         LocalDate currentDate = LocalDate.now();
         while ((lastProfitUpdate.isBefore(currentDate.minusYears(1)))) {
             BigDecimal interest = super.getBalance().getAmount().multiply(interestRate);
+            interest = interest.setScale(2, RoundingMode.HALF_UP);
             super.getBalance().increaseAmount(interest);
             lastProfitUpdate = lastProfitUpdate.plusYears(1);
         }
+        return super.getBalance();
     }
 
     public void applyPenaltyFee() {
